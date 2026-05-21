@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Dashboard Palestra V4</title>
+<style>
+:root{
+  --bg:#eef3f8;--card:#fff;--line:#d8e1ee;--text:#162033;--muted:#64748b;
+  --blue:#213d66;--blue2:#2f5f9e;--light:#eaf2fb;--ok:#0f8a42;--warn:#b77900;--err:#c91c1c;
+  --safe:env(safe-area-inset-bottom,0px)
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);padding-bottom:calc(82px + var(--safe))}
+button,input,select,textarea{font-family:inherit}button{cursor:pointer;touch-action:manipulation}
+.app{max-width:1180px;margin:auto}.header{position:sticky;top:0;z-index:20;background:var(--blue);color:#fff;padding:12px 14px;border-bottom:1px solid #10213b;box-shadow:0 2px 12px #0002}.titlebar{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.titlebar h1{font-size:22px;margin:0;letter-spacing:.2px}.subtitle{font-size:12px;opacity:.88;margin-top:3px}.badge{background:#ffffff22;border:1px solid #ffffff44;border-radius:999px;padding:7px 10px;font-size:11px;font-weight:900;white-space:nowrap}.top-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px}
+.page{display:none;padding:10px}.page.active{display:block}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:10px;box-shadow:0 1px 4px #0001}.card h2{font-size:17px;margin:0 0 10px}.card h3{font-size:14px;margin:12px 0 7px}.hint{font-size:12px;line-height:1.35;color:var(--muted)}.small{font-size:11px;color:var(--muted);font-weight:900;margin-bottom:4px}
+.btn{border:1px solid var(--line);background:#fff;border-radius:12px;min-height:42px;padding:9px 12px;font-weight:900;color:var(--text)}.btn.primary{background:var(--blue2);color:#fff;border-color:var(--blue2)}.btn.ok{background:var(--ok);color:#fff;border-color:var(--ok)}.btn.warn{background:#f28c28;color:#fff;border-color:#f28c28}.btn.bad{background:var(--err);color:#fff;border-color:var(--err)}.btn.full{width:100%}.row{display:flex;gap:8px;flex-wrap:wrap}.grid{display:grid;gap:9px}.grid.two{grid-template-columns:repeat(2,1fr)}.grid.three{grid-template-columns:repeat(3,1fr)}.grid.four{grid-template-columns:repeat(4,1fr)}input,select,textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:9px;background:#fff;font-size:14px;min-height:40px}textarea{min-height:75px;resize:vertical}
+.metrics{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}.metric{background:#fff;border:1px solid var(--line);border-radius:13px;padding:10px;text-align:center;min-width:0}.metric .num{font-size:21px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.metric .lbl{font-size:10px;color:var(--muted);font-weight:900}.metric.ok{border-color:#0f8a4244;background:#f0fff5}.metric.warn{border-color:#f2b40066;background:#fff8df}.metric.err{border-color:#d9000066;background:#fff0f0}
+.section-tabs{display:flex;gap:6px;overflow:auto;padding:0 0 8px;margin-bottom:8px}.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 11px;font-size:12px;font-weight:900;white-space:nowrap}.chip.active{background:var(--blue2);color:#fff;border-color:var(--blue2)}
+.workout-table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px;background:#fff}table{width:100%;border-collapse:collapse;font-size:11px}.workout-table{min-width:1010px;table-layout:fixed}th,td{border-bottom:1px solid #e9eef5;border-right:1px solid #e9eef5;padding:4px;text-align:left;white-space:nowrap}th{background:var(--blue);color:#fff;position:sticky;top:0;z-index:2;font-size:10px}.workout-table th:nth-child(1){width:34px}.workout-table th:nth-child(2){width:170px}.workout-table th:nth-child(3){width:76px}.workout-table th:nth-child(n+4):nth-child(-n+15){width:54px}.workout-table th:nth-child(16){width:78px}.workout-table th:nth-child(17){width:112px}td.exercise{background:var(--light);font-weight:900;white-space:normal;line-height:1.2}.target{font-weight:900;color:#243b57;white-space:normal;line-height:1.2}.group-pill{display:inline-block;margin-top:3px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:2px 5px;font-size:9px;color:var(--muted)}.setinput{width:46px;min-height:30px;padding:4px;text-align:center;border-radius:7px;font-size:12px}.repsinput{width:42px}.donebox{width:17px;height:17px;min-height:17px}.volcell{background:#f5f7fb;font-weight:900;text-align:right}.noteinput{min-width:96px;min-height:30px;padding:4px;font-size:12px}.extra-tools{display:grid;grid-template-columns:1.4fr .8fr .8fr auto;gap:8px;align-items:end;margin:8px 0 10px;padding:10px;border:1px dashed var(--line);border-radius:14px;background:#f8fbff}.mini-link{border:0;background:transparent;color:var(--err);font-weight:900;font-size:11px;padding:0;margin-top:4px}
+.barrow{display:grid;grid-template-columns:120px 1fr 64px;gap:8px;align-items:center;font-size:12px;font-weight:900;margin:7px 0}.bar{height:20px;border-radius:999px;border:1px solid var(--line);background:#edf2f7;overflow:hidden}.bar>span{display:block;height:100%;background:var(--blue2);min-width:2px}.advice{border:1px solid var(--line);background:#f8fbff;border-radius:13px;padding:10px;font-weight:800;line-height:1.4}.advice.ok{background:#f0fff5;border-color:#0f8a4244}.advice.warn{background:#fff8df;border-color:#f2b40066}.advice.err{background:#fff0f0;border-color:#d9000066}
+.bottom{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);z-index:30;padding:7px 8px calc(7px + var(--safe));display:flex;justify-content:center}.bottom-inner{max-width:1180px;width:100%;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.nav{border:0;background:#eef3f8;border-radius:13px;min-height:50px;font-size:11px;font-weight:900;color:var(--muted)}.nav.active{background:var(--blue2);color:#fff}.toast{position:fixed;left:50%;bottom:calc(92px + var(--safe));transform:translateX(-50%);display:none;background:#111827;color:#fff;padding:12px 15px;border-radius:18px;font-size:13px;font-weight:900;z-index:60;box-shadow:0 4px 18px #0004;max-width:min(92vw,760px);text-align:center}.toast.ok{background:var(--ok)}.toast.err{background:var(--err)}.history-item{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;border:1px solid var(--line);border-radius:13px;padding:10px;margin-bottom:8px;background:#fff}.history-title{font-weight:900}.history-meta{font-size:12px;color:var(--muted);margin-top:3px}.hide{display:none!important}
+@media(max-width:760px){.metrics{grid-template-columns:repeat(2,1fr)}.grid.two,.grid.three,.grid.four,.extra-tools{grid-template-columns:1fr}.top-actions{grid-template-columns:1fr}.titlebar h1{font-size:18px}.barrow{grid-template-columns:92px 1fr 52px}.card{padding:10px}.page{padding:8px}.workout-table{min-width:930px}.setinput{width:42px}.repsinput{width:39px}}
+@media print{body{background:#fff;padding:0}.header,.bottom,.toast,.no-print{display:none!important}.page{display:block!important;padding:0}.card{box-shadow:none;border:0;margin-bottom:12px}.workout-table-wrap{overflow:visible;border:1px solid #ddd}th{position:static!important;background:#213d66!important;color:#fff!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}.setinput,.noteinput,input,textarea{border:1px solid #aaa}.page:not(#page-dashboard):not(#page-workout){display:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="header">
+  <div class="titlebar"><div><h1>Dashboard Pallavolo & Palestra</h1><div class="subtitle">Massa, forza generale, cardio e scheda serie per serie</div></div><div class="badge">HTML V3</div></div>
+  <div class="top-actions no-print"><button class="btn primary" onclick="App.calculate(true)">CALCOLA / AGGIORNA</button><button class="btn" onclick="App.saveSession()">SALVA SESSIONE</button><button class="btn" onclick="Export.printReport()">REPORT / PDF</button></div>
+</header>
+<main>
+<section class="page active" id="page-dashboard">
+  <div class="card"><h2>1. Dati atleta</h2><div class="grid four"><div><div class="small">Peso corporeo (kg)</div><input id="peso" inputmode="decimal" value="85"></div><div><div class="small">Altezza (cm)</div><input id="altezza" inputmode="decimal" value="180"></div><div><div class="small">Età</div><input id="eta" inputmode="numeric" value="21"></div><div><div class="small">Data allenamento</div><input id="dataAllenamento" type="date"></div></div><div style="margin-top:8px"><div class="small">Obiettivo</div><input id="obiettivo" value="Massa + salto + forza attacco"></div></div>
+  <div class="card"><h2>2. Volume pesi automatico</h2><div class="metrics"><div class="metric"><div class="num" id="volGambe">0</div><div class="lbl">Gambe</div></div><div class="metric"><div class="num" id="volSchiena">0</div><div class="lbl">Schiena</div></div><div class="metric"><div class="num" id="volPetto">0</div><div class="lbl">Petto</div></div><div class="metric"><div class="num" id="volSpalle">0</div><div class="lbl">Spalle</div></div><div class="metric"><div class="num" id="volBraccia">0</div><div class="lbl">Braccia</div></div><div class="metric ok"><div class="num" id="volTotale">0</div><div class="lbl">Totale</div></div></div><div id="volumeBars" style="margin-top:10px"></div><h3>Stima kcal pesi</h3><div class="grid three"><div><div class="small">Durata pesi (min)</div><input id="durataPesi" inputmode="decimal" value="75"></div><div><div class="small">Intensità stimata</div><select id="metPesi"><option value="3.5">Leggera</option><option value="5" selected>Media</option><option value="6">Alta</option></select></div><div><div class="small">Kcal pesi stimate</div><input id="kcalPesi" readonly value="0"></div></div><p class="hint">Stima indicativa basata su peso corporeo, durata e intensità. Il volume resta il dato principale per monitorare i progressi sui carichi.</p></div>
+  <div class="card"><h2>3. Cardio tapis roulant</h2><div class="grid four"><div><div class="small">Velocità media (km/h)</div><input id="velocita" inputmode="decimal" value="4,5"></div><div><div class="small">Pendenza media (%)</div><input id="pendenza" inputmode="decimal" value="6"></div><div><div class="small">Durata (min)</div><input id="durata" inputmode="decimal" value="20"></div><div><div class="small">Kcal manuali</div><input id="kcalManuali" inputmode="decimal" placeholder="es. 170-205"></div></div><div class="metrics" style="margin-top:8px"><div class="metric"><div class="num" id="metStimato">0</div><div class="lbl">MET stimato</div></div><div class="metric"><div class="num" id="kcalMin">0</div><div class="lbl">Kcal/min</div></div><div class="metric ok"><div class="num" id="kcalTot">0</div><div class="lbl">Kcal cardio</div></div><div class="metric warn"><div class="num" id="kcalTotaliAllenamento">0</div><div class="lbl">Kcal totali stimate</div></div><div class="metric"><div class="num">18-20</div><div class="lbl">Min target</div></div><div class="metric"><div class="num" id="cardioStatus">—</div><div class="lbl">Stato</div></div></div><div class="grid four" style="margin-top:8px"><div><div class="small">Fase 1</div><input id="cardioF1" value="2 min 3.5 km/h 4%"></div><div><div class="small">Fase 2</div><input id="cardioF2" value="3 min 4.5 km/h 8%"></div><div><div class="small">Fase 3</div><input id="cardioF3" value="10 min 4.5/4.8 km/h 11/12%"></div><div><div class="small">Fase 4</div><input id="cardioF4" value="3/5 min 3.5/4.0 km/h 7/8%"></div></div></div>
+  <div class="card"><h2>4. Consiglio automatico</h2><div class="advice" id="adviceBox">Aggiornato in base a volume, completamento esercizi e kcal stimate.</div></div>
+</section>
+<section class="page" id="page-workout">
+  <div class="card"><h2>Dettaglio allenamento - serie per serie</h2><p class="hint">Inserisci kg e ripetizioni di ogni serie. La tabella è più compatta: filtra per gruppo muscolare per lavorare solo sulla zona che ti serve.</p><div class="section-tabs no-print" id="groupTabs"></div><div class="row no-print" style="margin-bottom:8px"><button class="btn primary" onclick="App.fillTargetReps()">Compila reps target</button><button type="button" class="btn" id="btnClearReps">Cancella reps</button><button class="btn" onclick="App.showAllGroups()">Mostra tutto</button><button class="btn warn" onclick="App.clearToday()">Pulisci sessione</button></div><div class="extra-tools no-print"><div><div class="small">Esercizio extra</div><input id="extraName" placeholder="es. Affondi, Face pull, Leg press singola..."></div><div><div class="small">Gruppo / zona</div><select id="extraGroup"></select></div><div><div class="small">Target</div><input id="extraTarget" placeholder="es. 3x10-12"></div><button class="btn primary" onclick="App.addExtraExercise()">+ Aggiungi</button></div><div class="workout-table-wrap"><table class="workout-table"><thead><tr><th>✓</th><th>Esercizio</th><th>Target</th><th>S1 kg</th><th>S1 reps</th><th>S2 kg</th><th>S2 reps</th><th>S3 kg</th><th>S3 reps</th><th>S4 kg</th><th>S4 reps</th><th>S5 kg</th><th>S5 reps</th><th>S6 kg</th><th>S6 reps</th><th>Volume</th><th>Note</th></tr></thead><tbody id="workoutBody"></tbody></table></div></div>
+</section>
+<section class="page" id="page-history"><div class="card"><h2>Storico allenamenti</h2><p class="hint">Le sessioni salvate restano nel browser di questo dispositivo.</p><div class="row no-print" style="margin-bottom:10px"><button class="btn primary" onclick="App.saveSession()">Salva sessione attuale</button><button class="btn" onclick="Export.json()">Export JSON</button><label class="btn">Import JSON<input type="file" accept=".json" style="display:none" onchange="Export.importJSON(this)"></label><button type="button" class="btn bad" id="btnDeleteHistory">Cancella storico</button></div><div id="historyList"></div></div></section>
+<section class="page" id="page-progress"><div class="card"><h2>Progressi</h2><div class="metrics"><div class="metric"><div class="num" id="histCount">0</div><div class="lbl">Sessioni</div></div><div class="metric"><div class="num" id="bestTotal">0</div><div class="lbl">Miglior volume</div></div><div class="metric"><div class="num" id="avgTotal">0</div><div class="lbl">Media volume</div></div><div class="metric"><div class="num" id="lastTotal">0</div><div class="lbl">Ultimo volume</div></div><div class="metric"><div class="num" id="bestKcal">0</div><div class="lbl">Migliori kcal</div></div><div class="metric"><div class="num" id="lastKcal">0</div><div class="lbl">Ultime kcal</div></div></div><h3>Andamento ultime sessioni</h3><div id="progressBars"></div></div><div class="card"><h2>Record esercizi</h2><div class="workout-table-wrap"><table><thead><tr><th>Esercizio</th><th>Gruppo</th><th>Miglior kg</th><th>Miglior volume sessione</th></tr></thead><tbody id="recordsBody"></tbody></table></div></div></section>
+</main>
+</div>
+<div class="bottom no-print"><div class="bottom-inner"><button class="nav active" id="nav-dashboard" onclick="UI.showPage('dashboard')">DASHBOARD</button><button class="nav" id="nav-workout" onclick="UI.showPage('workout')">ALLENAMENTO</button><button class="nav" id="nav-history" onclick="UI.showPage('history')">STORICO</button><button class="nav" id="nav-progress" onclick="UI.showPage('progress')">PROGRESSI</button></div></div>
+<div class="toast" id="toast"></div>
+<script>
+const CFG={key:'palestraDashboardV2'};
+const Groups=['Tutti','Gambe','Petto','Schiena','Spalle','Braccia','Cardio','Core','Altro'];
+const MuscleGroups=Groups.filter(g=>g!=='Tutti');
+const BaseExercises=[
+{id:'mobility',group:'Altro',name:'Mobilità anche, caviglie, spalle',target:'tempo necessario',sets:5,kg:['','','','','','']},
+{id:'warmup_cardio',group:'Altro',name:'Riscaldamento cardio',target:'5 min',sets:5,kg:['','','','','','']},
+{id:'pressa_orizzontale',group:'Gambe',name:'Pressa orizzontale',target:'5x10-12',sets:5,kg:['76','84','92','96','102','']},
+{id:'hip_thrust_machine',group:'Gambe',name:'Hip thrust machine',target:'5x8-10',sets:5,kg:['macchina','+5','+10','+15','+20','']},
+{id:'squat_rack_guidato',group:'Gambe',name:'Squat al rack guidato',target:'5x8-10',sets:5,kg:['50','50','60','70','85','']},
+{id:'romanian_deadlift',group:'Gambe',name:'Romanian deadlift',target:'5x8-10',sets:5,kg:['30','30','40','40','45','']},
+{id:'leg_curl',group:'Gambe',name:'Leg curl',target:'5x10-12',sets:5,kg:['25','30','35','40','45','']},
+{id:'leg_extension',group:'Gambe',name:'Leg extension',target:'5x10-12',sets:5,kg:['30','35','35','40','40','']},
+{id:'calf_machine',group:'Gambe',name:'Calf machine',target:'3x10-12',sets:3,kg:['','','','','','']},
+{id:'adduttori_macchina',group:'Gambe',name:'Adduttori macchina',target:'3x15-20',sets:3,kg:['','','','','','']},
+{id:'abduttori_macchina',group:'Gambe',name:'Abduttori macchina',target:'3x15-20',sets:3,kg:['','','','','','']},
+{id:'panca_piana_bilanciere',group:'Petto',name:'Panca piana bilanciere',target:'5x8-10',sets:5,kg:['30','40','45','50','55','']},
+{id:'panca_inclinata_manubri',group:'Petto',name:'Panca inclinata manubri',target:'5x8-10',sets:5,kg:['30','30','40','40','40-45','']},
+{id:'croci_manubri',group:'Petto',name:'Croci con manubri su panca piana/inclinata',target:'5x10',sets:5,kg:['','','','','','']},
+{id:'push_up',group:'Petto',name:'Push-up',target:'3xmax controllato',sets:3,kg:['','','','','','']},
+{id:'lat_machine',group:'Schiena',name:'Lat machine',target:'5x8-10',sets:5,kg:['35','35','40','40','45','']},
+{id:'rematore_macchina',group:'Schiena',name:'Rematore macchina',target:'5x8-10',sets:5,kg:['35','40','45','50','60','']},
+{id:'rematore_manubrio',group:'Schiena',name:'Rematore manubrio a un braccio',target:'5x8-10 per lato',sets:5,kg:['','','','','','']},
+{id:'pullover_manubrio',group:'Schiena',name:'Pullover con manubrio',target:'5x10',sets:5,kg:['','','','','','']},
+{id:'shoulder_press',group:'Spalle',name:'Shoulder press',target:'5x8-10',sets:5,kg:['20','25','30','35','40','']},
+{id:'alzate_laterali',group:'Spalle',name:'Alzate laterali',target:'5x12-15',sets:5,kg:['6','8','8','10','10','']},
+{id:'alzate_posteriori',group:'Spalle',name:'Alzate posteriori con manubri su panca inclinata',target:'5x10',sets:5,kg:['','','','','','']},
+{id:'ytw_panca',group:'Spalle',name:'Y-T-W su panca inclinata',target:'3x10-12',sets:3,kg:['','','','','','']},
+{id:'curl_manubri',group:'Braccia',name:'Curl manubri',target:'5x10-12',sets:5,kg:['10','10','12','12','14','']},
+{id:'french_press',group:'Braccia',name:'French press con manubrio o bilanciere EZ',target:'3x10-12',sets:3,kg:['20','25','30','','','']},
+{id:'curl_martello',group:'Braccia',name:'Curl martello con manubri',target:'3x10-12',sets:3,kg:['','','','','','']},
+{id:'panca_presa_stretta',group:'Braccia',name:'Panca presa stretta',target:'3x8-10',sets:3,kg:['','','','','','']},
+{id:'tapis_progressivo',group:'Cardio',name:'Tapis roulant progressivo',target:'18-20 min',sets:4,kg:['','','','','','']},
+{id:'plank',group:'Core',name:'Plank',target:'3x45-60 sec',sets:3,kg:['corpo libero','corpo libero','corpo libero','','','']},
+{id:'side_plank',group:'Core',name:'Side plank',target:'3x30-45 sec per lato',sets:3,kg:['corpo libero','corpo libero','corpo libero','','','']},
+{id:'scapular_push_up',group:'Core',name:'Scapular push-up',target:'3x12-15',sets:3,kg:['corpo libero','corpo libero','corpo libero','','','']},
+{id:'stretching_finale',group:'Altro',name:'Stretching leggero finale',target:'5-8 min',sets:5,kg:['','','','','','']}
+];
+let state={athlete:{},cardio:{},weights:{durataPesi:'75',metPesi:'5'},workout:{},customExercises:[],history:[],filter:'Tutti'};
+const $=id=>document.getElementById(id);
+const Exercises=()=>BaseExercises.concat(state.customExercises||[]);
+const Helpers={
+  num(v){if(v==null)return 0;let s=String(v).trim().replace(',','.');let m=s.match(/[-+]?\d+(?:\.\d+)?/);return m?Number(m[0]):0},
+  fmt(n){return Math.round(Number(n)||0).toLocaleString('it-IT')},
+  toast(msg,type=''){toast.textContent=msg;toast.className='toast '+type;toast.style.display='block';clearTimeout(window.__toast);window.__toast=setTimeout(()=>toast.style.display='none',1700)},
+  esc(x){return String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))},
+  targetReps(t){let m=String(t).match(/x(\d+)(?:-(\d+))?/i);return m?Number(m[2]||m[1]):''},
+  uid(){return 'extra_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,6)}
+};
+const Storage={
+  save(){localStorage.setItem(CFG.key,JSON.stringify(state))},
+  load(){
+    let raw=localStorage.getItem(CFG.key)||localStorage.getItem('palestraDashboardV1');
+    if(!raw)return;
+    try{
+      let loaded=JSON.parse(raw);
+      state={...state,...loaded,weights:{...state.weights,...(loaded.weights||{})},customExercises:Array.isArray(loaded.customExercises)?loaded.customExercises:[],history:Array.isArray(loaded.history)?loaded.history:[]};
+      state.history.forEach((h,idx)=>{if(!h.sid)h.sid='sess_'+(h.savedAt||h.date||idx)+'_'+idx});
+    }catch(e){console.warn('Errore caricamento stato',e)}
+  }
+};
+const UI={
+  showPage(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$('page-'+n).classList.add('active');document.querySelectorAll('.nav').forEach(b=>b.classList.remove('active'));$('nav-'+n).classList.add('active');App.calculate(false);},
+  renderTabs(){groupTabs.innerHTML=Groups.map(g=>`<button class="chip ${state.filter===g?'active':''}" onclick="App.filterGroup('${g}')">${g}</button>`).join('');extraGroup.innerHTML=MuscleGroups.map(g=>`<option value="${g}">${g}</option>`).join('')},
+  renderWorkout(){UI.renderTabs();workoutBody.innerHTML=Exercises().filter(ex=>state.filter==='Tutti'||ex.group===state.filter).map(ex=>UI.rowExercise(ex)).join('')},
+  rowExercise(ex){let w=state.workout[ex.id]||App.defaultExerciseState(ex);let cells='';for(let i=0;i<6;i++){let disabled=i>=ex.sets?'disabled':'';cells+=`<td><input class="setinput kginput" data-id="${ex.id}" data-set="${i}" data-type="kg" ${disabled} value="${Helpers.esc(w.sets[i]?.kg||'')}" oninput="App.updateSet(this)"></td><td><input class="setinput repsinput" data-id="${ex.id}" data-set="${i}" data-type="reps" ${disabled} value="${Helpers.esc(w.sets[i]?.reps||'')}" oninput="App.updateSet(this)" inputmode="decimal"></td>`}
+    let meta=ex.custom?`<button class="mini-link no-print" onclick="App.deleteExtraExercise('${ex.id}')">Elimina extra</button>`:`<span class="group-pill">${ex.group}</span>`;
+    return `<tr data-group="${ex.group}"><td><input class="donebox" type="checkbox" ${w.done?'checked':''} onchange="App.toggleDone('${ex.id}',this.checked)"></td><td class="exercise">${Helpers.esc(ex.name)}<br>${meta}</td><td class="target">${Helpers.esc(ex.target)}</td>${cells}<td class="volcell" id="vol_${ex.id}">0</td><td><input class="noteinput" value="${Helpers.esc(w.note||'')}" oninput="App.updateNote('${ex.id}',this.value)"></td></tr>`},
+  renderHistory(){
+    if(!Array.isArray(state.history))state.history=[];
+    if(!state.history.length){historyList.innerHTML='<p class="hint">Nessuna sessione salvata.</p>';return}
+    historyList.innerHTML=state.history.slice().reverse().map((h,i)=>{
+      const idx=state.history.length-1-i;
+      if(!h.sid)h.sid='sess_'+(h.savedAt||h.date||idx)+'_'+idx;
+      const key=Helpers.esc(h.sid);
+      const g=h.groups||{};
+      return `<div class="history-item" data-session-key="${key}"><div><div class="history-title">${Helpers.esc(h.date||'Sessione')} · ${Helpers.fmt(h.total)} kg volume</div><div class="history-meta">Gambe ${Helpers.fmt(g.Gambe||0)} · Petto ${Helpers.fmt(g.Petto||0)} · Schiena ${Helpers.fmt(g.Schiena||0)} · Spalle ${Helpers.fmt(g.Spalle||0)} · Braccia ${Helpers.fmt(g.Braccia||0)} · Kcal ${Helpers.fmt(h.kcal||0)}</div></div><div class="row"><button type="button" class="btn" data-history-action="load" data-session-key="${key}">Carica</button><button type="button" class="btn bad" data-history-action="delete" data-session-key="${key}">Elimina</button></div></div>`
+    }).join('');
+    Storage.save();
+  },
+  bar(label,value,total){let pct=total?Math.round(value/total*100):0;return `<div class="barrow"><span>${Helpers.esc(label)}</span><div class="bar"><span style="width:${pct}%"></span></div><span>${pct}%</span></div>`}
+};
+const App={
+  init(){Storage.load();if(!dataAllenamento.value)dataAllenamento.value=new Date().toISOString().slice(0,10);Exercises().forEach(ex=>{if(!state.workout[ex.id])state.workout[ex.id]=App.defaultExerciseState(ex)});App.syncInputsFromState();UI.renderWorkout();App.calculate(false);UI.renderHistory();},
+  defaultExerciseState(ex){return{done:false,note:'',sets:Array.from({length:6},(_,i)=>({kg:ex.kg?.[i]||'',reps:''}))}},
+  syncInputsFromState(){const a=state.athlete||{},c=state.cardio||{},w=state.weights||{};['peso','altezza','eta','obiettivo','dataAllenamento'].forEach(id=>{if(a[id]!==undefined)$(id).value=a[id]});['velocita','pendenza','durata','kcalManuali','cardioF1','cardioF2','cardioF3','cardioF4'].forEach(id=>{if(c[id]!==undefined)$(id).value=c[id]});['durataPesi','metPesi'].forEach(id=>{if(w[id]!==undefined)$(id).value=w[id]})},
+  saveInputsToState(){state.athlete={peso:peso.value,altezza:altezza.value,eta:eta.value,obiettivo:obiettivo.value,dataAllenamento:dataAllenamento.value};state.cardio={velocita:velocita.value,pendenza:pendenza.value,durata:durata.value,kcalManuali:kcalManuali.value,cardioF1:cardioF1.value,cardioF2:cardioF2.value,cardioF3:cardioF3.value,cardioF4:cardioF4.value};state.weights={durataPesi:durataPesi.value,metPesi:metPesi.value}},
+  updateSet(el){let id=el.dataset.id,i=+el.dataset.set,type=el.dataset.type;let ex=Exercises().find(e=>e.id===id);state.workout[id]??=App.defaultExerciseState(ex);state.workout[id].sets[i][type]=el.value;App.calculate(false);Storage.save()},
+  updateNote(id,v){state.workout[id].note=v;Storage.save()},
+  toggleDone(id,v){state.workout[id].done=v;Storage.save();App.calculate(false)},
+  exerciseVolume(ex){let w=state.workout[ex.id]||App.defaultExerciseState(ex);return w.sets.reduce((sum,s)=>sum+Helpers.num(s.kg)*Helpers.num(s.reps),0)},
+  calculate(showToast=false){App.saveInputsToState();let groups={},total=0;Exercises().forEach(ex=>{let v=App.exerciseVolume(ex);total+=v;groups[ex.group]=(groups[ex.group]||0)+v;let cell=$('vol_'+ex.id);if(cell)cell.textContent=Helpers.fmt(v)});volGambe.textContent=Helpers.fmt(groups.Gambe||0);volSchiena.textContent=Helpers.fmt(groups.Schiena||0);volPetto.textContent=Helpers.fmt(groups.Petto||0);volSpalle.textContent=Helpers.fmt(groups.Spalle||0);volBraccia.textContent=Helpers.fmt(groups.Braccia||0);volTotale.textContent=Helpers.fmt(total);volumeBars.innerHTML=['Gambe','Schiena','Petto','Spalle','Braccia','Core'].map(g=>UI.bar(g,groups[g]||0,total)).join('');let kcalWeights=App.calcWeightsKcal();let kcalCardio=App.calcCardio();kcalTotaliAllenamento.textContent=Helpers.fmt(kcalWeights+kcalCardio);App.advice(total,kcalWeights,kcalCardio);App.calcProgress(total,kcalWeights+kcalCardio);Storage.save();if(showToast)Helpers.toast('Calcolato e salvato','ok');return{groups,total,kcal:kcalWeights+kcalCardio}},
+  calcWeightsKcal(){let weight=Helpers.num(peso.value)||85,dur=Helpers.num(durataPesi.value),met=Helpers.num(metPesi.value)||5;let kcal=met*3.5*weight/200*dur;kcalPesi.value=Helpers.fmt(kcal);return kcal},
+  calcCardio(){let speed=Helpers.num(velocita.value),grade=Helpers.num(pendenza.value)/100,dur=Helpers.num(durata.value),weight=Helpers.num(peso.value)||85;let vo2=(0.1*(speed*1000/60))+(1.8*(speed*1000/60)*grade)+3.5;let met=vo2/3.5,kmin=met*3.5*weight/200,ktot=kmin*dur;let manual=kcalManuali.value.trim();if(manual){let parts=manual.match(/\d+(?:[,.]\d+)?/g);if(parts&&parts.length){ktot=parts.map(Helpers.num).reduce((a,b)=>a+b,0)/parts.length;kmin=dur?ktot/dur:0;}}
+    metStimato.textContent=met?met.toFixed(1).replace('.',','):'0';kcalMin.textContent=kmin?kmin.toFixed(1).replace('.',','):'0';kcalTot.textContent=Helpers.fmt(ktot);cardioStatus.textContent=dur>=18?'OK':'Basso';return ktot||0},
+  advice(total,kcalWeights,kcalCardio){let done=Object.values(state.workout).filter(w=>w.done).length;let totalExercises=Exercises().length;let groups=['Gambe','Petto','Schiena','Spalle','Braccia'].map(g=>({g,v:Exercises().filter(ex=>ex.group===g).reduce((s,ex)=>s+App.exerciseVolume(ex),0)})).sort((a,b)=>b.v-a.v);let txt=[];if(done)txt.push(`Completati ${done}/${totalExercises} esercizi.`);if(total>0)txt.push(`Volume totale attuale: ${Helpers.fmt(total)} kg.`);if(kcalWeights||kcalCardio)txt.push(`Kcal stimate: ${Helpers.fmt(kcalWeights+kcalCardio)} totali, di cui ${Helpers.fmt(kcalWeights)} dai pesi.`);if(groups[0]?.v>0)txt.push(`Zona più caricata: ${groups[0].g}.`);if(total>35000)txt.push('Volume alto: cura tecnica e recupero prima di aumentare ancora i carichi.');else if(done>=Math.max(1,totalExercises*.6))txt.push('Buon completamento: se le reps target sono state rispettate, valuta una piccola progressione la prossima volta.');if(!txt.length)txt.push('Compila serie e carichi per ricevere un consiglio automatico.');adviceBox.className='advice '+(total>35000?'warn':done>=Math.max(1,totalExercises*.6)?'ok':'');adviceBox.textContent=txt.join(' ')},
+  calcProgress(total,kcal){let h=state.history||[];histCount.textContent=h.length;bestTotal.textContent=Helpers.fmt(Math.max(0,...h.map(x=>x.total||0)));avgTotal.textContent=Helpers.fmt(h.length?h.reduce((a,b)=>a+(b.total||0),0)/h.length:0);lastTotal.textContent=Helpers.fmt(h.length?h[h.length-1].total:total);bestKcal.textContent=Helpers.fmt(Math.max(0,...h.map(x=>x.kcal||0),kcal||0));lastKcal.textContent=Helpers.fmt(h.length?h[h.length-1].kcal:kcal);progressBars.innerHTML=(h.slice(-8).map(x=>UI.bar(x.date||'Sessione',x.total||0,Math.max(1,...h.map(y=>y.total||0))))).join('')||'<p class="hint">Salva almeno una sessione per vedere l’andamento.</p>';App.records()},
+  records(){let rec={};state.history.forEach(s=>{Object.entries(s.exercises||{}).forEach(([id,data])=>{let ex=Exercises().find(e=>e.id===id);if(!ex)return;rec[id]??={name:ex.name,group:ex.group,bestKg:0,bestVol:0};rec[id].bestVol=Math.max(rec[id].bestVol,data.volume||0);(data.sets||[]).forEach(set=>rec[id].bestKg=Math.max(rec[id].bestKg,Helpers.num(set.kg)));})});recordsBody.innerHTML=Object.values(rec).sort((a,b)=>b.bestVol-a.bestVol).map(r=>`<tr><td>${Helpers.esc(r.name)}</td><td>${r.group}</td><td>${Helpers.fmt(r.bestKg)}</td><td>${Helpers.fmt(r.bestVol)}</td></tr>`).join('')||'<tr><td colspan="4">Nessun record salvato.</td></tr>'},
+  filterGroup(g){state.filter=g;UI.renderWorkout();App.calculate(false)},showAllGroups(){App.filterGroup('Tutti')},
+  fillTargetReps(){
+    Exercises().forEach(ex=>{
+      let reps=Helpers.targetReps(ex.target);if(!reps)return;
+      let w=state.workout[ex.id]||App.defaultExerciseState(ex);
+      for(let i=0;i<ex.sets;i++){if(!w.sets[i].reps)w.sets[i].reps=reps}
+      state.workout[ex.id]=w;
+    });
+    UI.renderWorkout();App.calculate(true)
+  },
+  clearReps(){
+    if(!confirm('Cancellare solo le ripetizioni da tutte le celle reps? I kg, le note e le spunte restano invariati.'))return;
+    Exercises().forEach(ex=>{
+      let w=state.workout[ex.id]||App.defaultExerciseState(ex);
+      for(let i=0;i<6;i++){ if(w.sets[i]) w.sets[i].reps=''; }
+      state.workout[ex.id]=w;
+    });
+    document.querySelectorAll('input.repsinput').forEach(inp=>{inp.value=''});
+    Storage.save();
+    UI.renderWorkout();
+    App.calculate(false);
+    Helpers.toast('Celle reps cancellate','ok')
+  },
+  clearToday(){if(!confirm('Pulire kg/reps/note della sessione attuale?'))return;Exercises().forEach(ex=>state.workout[ex.id]=App.defaultExerciseState(ex));UI.renderWorkout();App.calculate(true)},
+  addExtraExercise(){let name=extraName.value.trim();if(!name)return Helpers.toast('Inserisci il nome dell’esercizio extra','err');let ex={id:Helpers.uid(),custom:true,group:extraGroup.value||'Altro',name,target:extraTarget.value.trim()||'3x10-12',sets:6,kg:['','','','','','']};state.customExercises.push(ex);state.workout[ex.id]=App.defaultExerciseState(ex);extraName.value='';extraTarget.value='';Storage.save();UI.renderWorkout();App.calculate(true);Helpers.toast('Esercizio extra aggiunto','ok')},
+  deleteExtraExercise(id){if(!confirm('Eliminare questo esercizio extra?'))return;state.customExercises=(state.customExercises||[]).filter(e=>e.id!==id);delete state.workout[id];Storage.save();UI.renderWorkout();App.calculate(true)},
+  saveSession(){
+    let calc=App.calculate(false);
+    let snapshot={sid:Helpers.uid(),savedAt:new Date().toISOString(),date:dataAllenamento.value||new Date().toISOString().slice(0,10),athlete:{...state.athlete},cardio:{...state.cardio},weights:{...state.weights},total:calc.total,groups:calc.groups,kcal:calc.kcal,customExercises:JSON.parse(JSON.stringify(state.customExercises||[])),exercises:{}};
+    Exercises().forEach(ex=>snapshot.exercises[ex.id]={volume:App.exerciseVolume(ex),done:!!state.workout[ex.id]?.done,sets:JSON.parse(JSON.stringify(state.workout[ex.id]?.sets||[])),note:state.workout[ex.id]?.note||''});
+    if(!Array.isArray(state.history))state.history=[];
+    state.history.push(snapshot);Storage.save();UI.renderHistory();App.calculate(false);Helpers.toast('Sessione salvata nello storico','ok')
+  },
+  historyIndexByKey(key){return (state.history||[]).findIndex(h=>String(h.sid)===String(key))},
+  loadSessionByKey(key){const idx=App.historyIndexByKey(key);return App.loadSession(idx)},
+  deleteSessionByKey(key){const idx=App.historyIndexByKey(key);return App.deleteSession(idx)},
+  loadSession(i){
+    i=Number(i);let s=(state.history||[])[i];if(!s)return Helpers.toast('Sessione non trovata','err');
+    state.athlete=s.athlete||{};state.cardio=s.cardio||{};state.weights=s.weights||state.weights;
+    if(Array.isArray(s.customExercises)){s.customExercises.forEach(ex=>{if(!state.customExercises.find(e=>e.id===ex.id))state.customExercises.push(ex)})}
+    Exercises().forEach(ex=>{let d=s.exercises?.[ex.id];if(d)state.workout[ex.id]={done:!!d.done,note:d.note||'',sets:d.sets||App.defaultExerciseState(ex).sets}});
+    App.syncInputsFromState();UI.renderWorkout();App.calculate(true);UI.showPage('workout')
+  },
+  deleteSession(i){
+    i=Number(i);if(!Number.isInteger(i)||!Array.isArray(state.history)||!state.history[i])return Helpers.toast('Sessione non trovata','err');
+    if(!confirm('Eliminare questa sessione?'))return;
+    state.history.splice(i,1);Storage.save();UI.renderHistory();App.calculate(false);Helpers.toast('Sessione eliminata','ok')
+  },
+  deleteHistory(){
+    if(!Array.isArray(state.history))state.history=[];
+    if(!state.history.length){UI.renderHistory();return Helpers.toast('Storico già vuoto')}
+    if(!confirm('Cancellare tutto lo storico?'))return;
+    state.history.length=0;
+    Storage.save();UI.renderHistory();App.calculate(false);Helpers.toast('Storico cancellato','ok')
+  }
+};
+const Export={
+  json(){App.calculate(false);let blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});Export.download(blob,'dashboard_palestra_backup_v2.json')},
+  importJSON(input){let f=input.files&&input.files[0];if(!f)return;let r=new FileReader();r.onload=e=>{try{state={...state,...JSON.parse(e.target.result)};Storage.save();App.syncInputsFromState();UI.renderWorkout();UI.renderHistory();App.calculate(true)}catch(err){Helpers.toast('JSON non valido','err')}};r.readAsText(f);input.value=''},
+  download(blob,name){let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)},
+  printReport(){App.calculate(false);window.print()}
+};
+document.addEventListener('input',e=>{if(['peso','altezza','eta','obiettivo','dataAllenamento','velocita','pendenza','durata','kcalManuali','cardioF1','cardioF2','cardioF3','cardioF4','durataPesi','metPesi'].includes(e.target.id)){App.calculate(false)}});
+document.addEventListener('click',e=>{
+  const btn=e.target.closest('[data-history-action]');if(!btn)return;
+  e.preventDefault();e.stopPropagation();
+  const key=btn.dataset.sessionKey;
+  if(btn.dataset.historyAction==='load')App.loadSessionByKey(key);
+  if(btn.dataset.historyAction==='delete')App.deleteSessionByKey(key);
+});
+window.App=App;window.UI=UI;window.Export=Export;window.Storage=Storage;
+window.clearWorkoutReps=()=>App.clearReps();
+window.deleteAllHistory=()=>App.deleteHistory();
+setTimeout(()=>{
+  const cr=document.getElementById('btnClearReps'); if(cr)cr.addEventListener('click',e=>{e.preventDefault();App.clearReps()});
+  const dh=document.getElementById('btnDeleteHistory'); if(dh)dh.addEventListener('click',e=>{e.preventDefault();App.deleteHistory()});
+},0);
+App.init();
+</script>
+</body>
+</html>
